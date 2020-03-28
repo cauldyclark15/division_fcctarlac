@@ -1,0 +1,19 @@
+{
+  "name": "division_fcctarlac",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/cauldyclark15/math_gateway.git",
+  "author": "joseliecast <joselie@laguro.com>",
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "^0.5.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.2"
+  },
+  "scripts": {
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js"
+  }
+}
