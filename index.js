@@ -8,7 +8,7 @@ amqp.connect(CONN_URL, function (err, conn) {
       'question',
       async function (msg) {
         const publishToQueue = async (queueName, data) => {
-            ch.sendToQueue(queueName, new Buffer(data));
+            return ch.sendToQueue(queueName, new Buffer(data));
         };
 
         const numArray = msg.content.toString().split(',')
@@ -20,15 +20,15 @@ amqp.connect(CONN_URL, function (err, conn) {
             answer = Number(numArray[0]) + Number(numArray[1])
             break;
 
-            case '-':
-              answer = Number(numArray[0]) - Number(numArray[1])
-              break;
+          case '-':
+            answer = Number(numArray[0]) - Number(numArray[1])
+            break;
 
-              case '/':
-                answer = Number(numArray[0]) / Number(numArray[1])
-                break;
+          case '/':
+            answer = Number(numArray[0]) / Number(numArray[1])
+            break;
 
-                case 'x':
+          case 'x':
             answer = Number(numArray[0]) * Number(numArray[1])
             break;
         
@@ -37,7 +37,8 @@ amqp.connect(CONN_URL, function (err, conn) {
         }
 
         console.log('.....');
-        await publishToQueue('answer', answer.toString());
+        const pubResponse = await publishToQueue('answer', answer.toString());
+        console.log({pubResponse})
         console.log('published answer: ' + answer.toString());
       },
       {
