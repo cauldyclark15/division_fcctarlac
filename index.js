@@ -5,18 +5,40 @@ const CONN_URL =
 amqp.connect(CONN_URL, function (err, conn) {
   conn.createChannel(function (err, ch) {
     ch.consume(
-      'division',
+      'question',
       async function (msg) {
         const publishToQueue = async (queueName, data) => {
             ch.sendToQueue(queueName, new Buffer(data));
         };
 
         const numArray = msg.content.toString().split(',')
-        const quotient = Number(numArray[0]) / Number(numArray[1])
+
+        let answer = ''
+
+        switch (numArray[2]) {
+          case '+':
+            answer = Number(numArray[0]) + Number(numArray[1])
+            break;
+
+            case '-':
+              answer = Number(numArray[0]) - Number(numArray[1])
+              break;
+
+              case '/':
+                answer = Number(numArray[0]) / Number(numArray[1])
+                break;
+
+                case 'x':
+            answer = Number(numArray[0]) * Number(numArray[1])
+            break;
+        
+          default:
+            break;
+        }
 
         console.log('.....');
-        await publishToQueue('quotient', quotient.toString());
-        console.log('published division');
+        await publishToQueue('answer', answer.toString());
+        console.log('published answer: ' + answer.toString());
       },
       {
         noAck: true,
